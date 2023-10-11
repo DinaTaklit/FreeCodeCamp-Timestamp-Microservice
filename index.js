@@ -35,7 +35,8 @@ app.get("/api/", function (req, res) {
 // https://timestamp-microservice.freecodecamp.rocks.
 app.get("/api/:date", function (req, res) {
   const date = req.params.date;
-  const isUnix = date.match(/\-/g) ? false : true;
+  const regex = /^\d+$/g;
+  const isUnix = regex.test(date) ? true : false;
   try {
     if (isUnix) {
       return res.json({
