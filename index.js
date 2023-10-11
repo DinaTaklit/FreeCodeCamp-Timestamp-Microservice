@@ -28,12 +28,24 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date", function (req, res) {
   const date = req.params.date;
   const isUnix = date.match(/\-/g) ? false : true;
-  res.json({
-    unix: isUnix ? parseInt(date) : new Date(date).getTime(),
-    utc: isUnix
-      ? new Date(parseInt(date)).toUTCString()
-      : new Date(date).toUTCString(),
-  });
+  try {
+    if (isUnix) {
+      return res.json({
+        unix: parseInt(date),
+        utc: new Date(parseInt(date)).toUTCString(),
+      });
+    }
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate)) {
+      throw new Error("Invalid Date");
+    }
+    return res.json({
+      unix: parsedDate.getTime(),
+      utc: parsedDate.toUTCString(),
+    });
+  } catch (error) {
+    res.status(400).json({ error: "Invalid Date" });
+  }
 });
 
 // listen for requests :)
