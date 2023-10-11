@@ -23,6 +23,14 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
+// Return now date in case now parameter provided
+app.get("/api/", function (req, res) {
+  return res.json({
+    unix: new Date().getTime(),
+    utc: new Date().toUTCString(),
+  });
+});
+
 // Build a full stack JavaScript app that is functionally similar to this:
 // https://timestamp-microservice.freecodecamp.rocks.
 app.get("/api/:date", function (req, res) {
